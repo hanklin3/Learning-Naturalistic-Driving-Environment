@@ -101,6 +101,9 @@ def plot_yield_dist_distribution(yield_dist, gt_yield_dist, output_folder, densi
     plt.savefig(os.path.join(output_folder, file_name + '.pdf'), bbox_inches='tight')
     data.to_csv(os.path.join(output_folder, file_name + '.csv'), sep=",", index=False)
 
+    import pdb
+    pdb.set_trace()
+
 
 def plot_yield_speed_distribution(yield_v, gt_yield_v, output_folder, density=False):
     plt.figure(figsize=(12, 12))
@@ -156,6 +159,10 @@ def cal_KL_div(P, Q):
     # Convert into probability first
     P = P/np.sum(P)
     Q = Q/np.sum(Q)
+
+    mask = (Q!=0)
+    Q=Q[mask]
+    P=P[mask]
 
     KL_div = entropy(pk=P, qk=Q, base=None, axis=0)
     return KL_div

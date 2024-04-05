@@ -12,7 +12,7 @@ import time
 from simulation_modeling.traffic_simulator import TrafficSimulator
 from simulation_modeling.crashcritic import CrashCritic
 from simulation_modeling.trajectory_interpolator import TrajInterpolator
-from simulation_modeling.vehicle_generator import AA_rdbt_TrafficGenerator, rounD_TrafficGenerator
+from simulation_modeling.vehicle_generator import AA_rdbt_TrafficGenerator, rounD_TrafficGenerator, ring_TrafficGenerator
 from sim_evaluation_metric.realistic_metric import RealisticMetrics
 
 from basemap import Basemap
@@ -42,6 +42,8 @@ class SimulationInference(object):
             self.traffic_generator = AA_rdbt_TrafficGenerator(config=configs["traffic_generator_config"])
         elif configs["dataset"] == 'rounD':
             self.traffic_generator = rounD_TrafficGenerator(config=configs["traffic_generator_config"])
+        elif configs["dataset"] == 'ring':
+            self.traffic_generator = ring_TrafficGenerator(config=configs["traffic_generator_config"])
         else:
             raise NotImplementedError('{0} does not supported yet...Choose from ["AA_rdbt", "rounD"].'.format(configs["dataset"]))
 
@@ -86,6 +88,15 @@ class SimulationInference(object):
                 PET_configs["basemap_img"] = basemap_img
 
             elif self.dataset == 'rounD':
+                basemap_img = cv2.imread(configs["basemap_dir"], cv2.IMREAD_COLOR)
+                basemap_img = cv2.cvtColor(basemap_img, cv2.COLOR_BGR2RGB)
+                basemap_img = cv2.resize(basemap_img, (configs["map_width"], configs["map_height"]))
+                basemap_img = (basemap_img.astype(np.float64) * 0.6).astype(np.uint8)
+
+                PET_configs = configs["PET_configs"]
+                PET_configs["basemap_img"] = basemap_img
+
+            elif self.dataset == 'ring':
                 basemap_img = cv2.imread(configs["basemap_dir"], cv2.IMREAD_COLOR)
                 basemap_img = cv2.cvtColor(basemap_img, cv2.COLOR_BGR2RGB)
                 basemap_img = cv2.resize(basemap_img, (configs["map_width"], configs["map_height"]))

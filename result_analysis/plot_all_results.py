@@ -13,8 +13,15 @@ if __name__ == '__main__':
     # Simulation results. Change this to the folder of your results
     location = 'AA_rdbt'  # 'AA_rdbt' or 'rounD'
     experiment_name = 'NNDE-open-source-rerun-AA-rdbt-09122023-tune-crash-rate-5'  # 'AA_rdbt_paper_results' or 'rounD_paper_results' or your experiment
+    experiment_name = 'your-experiment-name'
     # res_folder = f'../data/paper-inference-results/{experiment_name}'
-    res_folder = f'D:/NNDE-open-source/results\inference/AA_rdbt_inference/{experiment_name}/3600s/raw_data'
+    res_folder = f'../results/inference/AA_rdbt_inference/{experiment_name}/36s/raw_data'
+    
+    location = 'rounD'
+    experiment_name = 'your-experiment-name'
+    res_folder = f'../results/inference/rounD_inference/your-experiment-name/36s/raw_data'
+    path = f'../results/inference/rounD_inference/your-experiment-name/'
+    assert os.path.exists(res_folder)
 
     # Ground-truth results
     if location == "AA_rdbt":

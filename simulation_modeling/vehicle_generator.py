@@ -252,3 +252,22 @@ class rounD_TrafficGenerator(TrafficGenerator):
 
         self.poisson_arr_rate_each_pos = [35, 494, 15, 406, 24, 387, 18, 427, 52, 72]  # veh/h based on rounD
         self.dt_arr_rate_each_pos = [poisson_arr_rate / (3600 / self.sim_ros) for poisson_arr_rate in self.poisson_arr_rate_each_pos]  # veh/each resolution
+
+
+class ring_TrafficGenerator(TrafficGenerator):
+
+    def __init__(self, config):
+        super(ring_TrafficGenerator, self).__init__(config)
+
+        initial_data_path = config["gen_veh_states_dir"]
+        initial_res_dict = pickle.load(open(os.path.join(initial_data_path, 'initial_vehicle_dict.pickle'), "rb"))
+
+        self.n_in1 = initial_res_dict['n_in1']
+
+        self.global_source_pos = [self.n_in1]
+        self.global_source_name = ['entrance_n_1']  # Make sure the name here is consistent with that in ROI_matcher.entrance_lane_matching.
+
+        self.local_source_pos = [(loc[0], loc[1]) for loc in self.global_source_pos]
+
+        self.poisson_arr_rate_each_pos = [35]  # veh/h based on rounD
+        self.dt_arr_rate_each_pos = [poisson_arr_rate / (3600 / self.sim_ros) for poisson_arr_rate in self.poisson_arr_rate_each_pos]  # veh/each resolution

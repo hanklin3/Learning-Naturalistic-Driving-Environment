@@ -94,6 +94,10 @@ def cal_KL_div(P, Q):
     P = P/np.sum(P)
     Q = Q/np.sum(Q)
 
+    mask = (Q!=0)
+    Q=Q[mask]
+    P=P[mask]
+
     KL_div = entropy(pk=P, qk=Q, base=None, axis=0)
     return KL_div
 

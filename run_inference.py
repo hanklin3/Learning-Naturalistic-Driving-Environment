@@ -29,6 +29,7 @@ if __name__ == '__main__':
             print(f"Loading config file: {args.config}")
         except yaml.YAMLError as exception:
             print(exception)
+            # configs = yaml.load(file)
 
     # Settings
     configs["device"] = torch.device("cuda:0" if configs["use_gpu"] else "cpu")
