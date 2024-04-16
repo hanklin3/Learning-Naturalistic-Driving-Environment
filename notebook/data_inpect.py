@@ -13,10 +13,10 @@ path = '../data/training/behavior_net/AA_rdbt/AA_rdbt-10h-data-local-heading-siz
 datafolder_dirs = glob.glob(os.path.join(path, '*.pickle'))
 print('datafolder_dirs', datafolder_dirs)
 vehicle_list = pickle.load(open(datafolder_dirs[0], "rb"))
-
+vehicle_list
 
 # %%
-vehicle_list
+
 TIME_BUFF=[]
 TIME_BUFF.append(vehicle_list)
 print(TIME_BUFF[:10])
@@ -32,6 +32,8 @@ path = '../data/inference/rounD/simulation_initialization/gen_veh_states/rounD/'
 datafolder_dirs = glob.glob(os.path.join(path, '*.pickle'))
 vehicle_list = pickle.load(open(datafolder_dirs[0], "rb"))
 vehicle_list.keys()
+vehicle_list['n_in1']
+
 
 # %%
 
