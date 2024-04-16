@@ -23,7 +23,7 @@ class MTLTrajectoryPredictionDataset(Dataset):
         self.is_train = is_train
         self.dataset = dataset
 
-        if self.dataset == 'rounD' or self.dataset == 'AA_rdbt':
+        if self.dataset == 'rounD' or self.dataset == 'AA_rdbt' or self.dataset == 'ring':
             split = 'train' if is_train else 'val'
             subfolders = sorted(os.listdir(os.path.join(path_to_traj_data, split)))
             subsubfolders = [sorted(os.listdir(os.path.join(path_to_traj_data, split, subfolders[i]))) for i in
@@ -50,14 +50,14 @@ class MTLTrajectoryPredictionDataset(Dataset):
             raise NotImplementedError( 'Wrong dataset name %s (choose one from [AA_rdbt, rounD,...])' % self.dataset)
 
     def __len__(self):
-        if self.dataset == 'rounD' or self.dataset == 'AA_rdbt':
+        if self.dataset == 'rounD' or self.dataset == 'AA_rdbt' or self.dataset == 'ring':
             return sum(self.each_subfolder_size)
         else:
             raise NotImplementedError( 'Wrong dataset name %s (choose one from [AA_rdbt, rounD,...])' % self.dataset)
 
     def __getitem__(self, idx):
 
-        if self.dataset == 'rounD' or self.dataset == 'AA_rdbt':
+        if self.dataset == 'rounD' or self.dataset == 'AA_rdbt' or self.dataset == 'ring':
             subfolder_id = random.choices(range(len(self.each_subfolder_size)), weights=self.subfolder_data_proportion)[0]
             subsubfolder_id = random.choices(range(len(self.traj_dirs[subfolder_id])), weights=self.subsubfolder_data_proportion[subfolder_id])[0]
             datafolder_dirs = self.traj_dirs[subfolder_id][subsubfolder_id]
@@ -145,7 +145,7 @@ class MTLTrajectoryPredictionDataset(Dataset):
 
 def get_loaders(configs):
 
-    if configs["dataset"] == 'AA_rdbt' or configs["dataset"] == 'rounD':
+    if configs["dataset"] == 'AA_rdbt' or configs["dataset"] == 'rounD' or configs["dataset"] == 'ring':
         training_set = MTLTrajectoryPredictionDataset(path_to_traj_data=configs["path_to_traj_data"], history_length=configs["history_length"], pred_length=configs["pred_length"],
                                                       max_num_vehicles=configs["max_num_vehicles"], is_train=True, dataset=configs["dataset"])
         val_set = MTLTrajectoryPredictionDataset(path_to_traj_data=configs["path_to_traj_data"], history_length=configs["history_length"], pred_length=configs["pred_length"],
