@@ -138,7 +138,8 @@ class CrashCritic(object):
         # Construct traj df
         for v in collision_vehicle_list:
             vid = v.id
-            self.traj_df = self.traj_df.append(pd.DataFrame.from_dict(self.traj_pool.pool[vid]), ignore_index=True)
+            # self.traj_df = self.traj_df.append(pd.DataFrame.from_dict(self.traj_pool.pool[vid]), ignore_index=True)
+            self.traj_df = pd.concat([self.traj_df, pd.DataFrame.from_dict(self.traj_pool.pool[vid])], ignore_index=True)
 
         dynamics_satisfy_flag = True
         for v in collision_vehicle_list:

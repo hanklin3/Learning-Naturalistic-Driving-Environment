@@ -50,7 +50,11 @@ class RealisticMetrics(object):
 
         # Construct traj df
         for vid in self.traj_pool.vehicle_id_list():
-            self.traj_df = self.traj_df.append(pd.DataFrame.from_dict(self.traj_pool.pool[vid]), ignore_index=True)
+            # self.traj_df = self.traj_df.append(pd.DataFrame.from_dict(self.traj_pool.pool[vid]), ignore_index=True)
+            # import pdb
+            # pdb.set_trace()
+            if not pd.DataFrame.from_dict(self.traj_pool.pool[vid]).empty:
+                self.traj_df = pd.concat([self.traj_df, pd.DataFrame.from_dict(self.traj_pool.pool[vid])], ignore_index=True)
 
     def in_circle_instant_speed_analysis(self):
         instant_speed_list = []

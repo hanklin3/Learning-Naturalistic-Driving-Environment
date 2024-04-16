@@ -104,6 +104,8 @@ class TrafficGenerator(object):
         for idx in loop_order:
             source = self.global_source_pos[idx]
             source_name = self.global_source_name[idx]
+            # import pdb
+            # pdb.set_trace()
             arr_or_gen_prob = None
             if self.method == 'Poisson':
                 arr_or_gen_prob = self.dt_arr_rate_each_pos[idx] if len(self.dt_arr_rate_each_pos) > 0 else self.default_dt_arr_rate
@@ -124,7 +126,10 @@ class TrafficGenerator(object):
 
                 if safe_flag is True:
                     self.gen_num += 1
+                    # v.location.x = 37
+                    # v.location.y = 0
                     CURRENT_VEH_LIST.append(v)
+                    # print('v.x', 'v.y', v.location.x, v.location.y)
 
         TIME_BUFF[-1] = CURRENT_VEH_LIST
 
@@ -269,5 +274,5 @@ class ring_TrafficGenerator(TrafficGenerator):
 
         self.local_source_pos = [(loc[0], loc[1]) for loc in self.global_source_pos]
 
-        self.poisson_arr_rate_each_pos = [35]  # veh/h based on rounD
+        self.poisson_arr_rate_each_pos = [10000]  # veh/h based on rounD
         self.dt_arr_rate_each_pos = [poisson_arr_rate / (3600 / self.sim_ros) for poisson_arr_rate in self.poisson_arr_rate_each_pos]  # veh/each resolution

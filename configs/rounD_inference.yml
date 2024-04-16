@@ -10,7 +10,7 @@ sim_num: 10  # Number of simulations to run.
 save_collision_data_flag: True  # Save crash data. This must set to True if want to analyze crash type and crash severity.
 gen_realistic_metric_flag: True  # Generate and save realistic metrics.
 gen_realistic_metric_dict:  # What metrics to generate.
-  PET: True  # Post-encroachment time.
+  PET: False  # Post-encroachment time.
   instant_speed: True  # Vehicle instantaneous speed
   yielding_speed_and_distance: True  # Each yielding moment calculate the yielding distance and speed with the conflicting vehicle.
   distance: True  # Vehicle distance
@@ -54,9 +54,9 @@ PET_configs: # This is pixel coordinates of the basemap image
   height_res: 23.5
 
 # Other save results and visualization
-save_simulated_TIME_BUFF_flag: False  # Save all generated simulated trajectories
-viz_flag: False  # Whether visualize the simulation.
-save_viz_flag: False  # Save simulation visualizations
+save_simulated_TIME_BUFF_flag: True  # Save all generated simulated trajectories
+viz_flag: True  # Whether visualize the simulation.
+save_viz_flag: True  # Save simulation visualizations
 save_fps: 10
 
 # Data needed for the simulation. E.g., map image, initial vehicle states, etc.

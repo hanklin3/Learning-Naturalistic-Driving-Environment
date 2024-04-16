@@ -295,6 +295,7 @@ class SimulationInference(object):
         if self.gen_realistic_metric_dict["distance"]:
             with open(os.path.join(self.realistic_metric_save_folder, "output_distance_list_three_circle.json"), 'w') as f:
                 json.dump(self.output_distance_all_vehicle_pairs_list_three_circle, f, indent=4)
+                
 
     def initialize_sim(self, initial_TIME_BUFF=None):
         """
@@ -413,6 +414,8 @@ class SimulationInference(object):
             if self.one_sim_colli_flag:
                 # Visualize frames
                 self.visualize_time_buff(TIME_BUFF, tt=tt)
+                import pdb
+                pdb.set_trace()
 
                 if self.save_collision_data_flag:
                     save_steps = 2

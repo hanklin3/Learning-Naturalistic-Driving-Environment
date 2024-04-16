@@ -88,6 +88,7 @@ class Trainer(object):
 
         self.checkpoint_dir = configs["checkpoint_dir"]
         self.vis_dir = configs["vis_dir"]
+        print('checkpoint_dir', self.checkpoint_dir)
 
         # check and create model dir
         if os.path.exists(self.checkpoint_dir) is False:

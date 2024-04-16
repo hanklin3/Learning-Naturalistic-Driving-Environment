@@ -19,14 +19,22 @@ if __name__ == '__main__':
     
     location = 'rounD'
     experiment_name = 'your-experiment-name'
-    res_folder = f'../results/inference/rounD_inference/your-experiment-name/36s/raw_data'
-    path = f'../results/inference/rounD_inference/your-experiment-name/'
+    res_folder = f'../results/inference/rounD_inference/{experiment_name}/36s/raw_data'
+    path = f'../results/inference/rounD_inference/{experiment_name}/'
+    assert os.path.exists(res_folder)
+
+    location = 'ring'
+    experiment_name = 'ring_slower'
+    res_folder = f'../results/inference/ring_inference/{experiment_name}/36s/raw_data'
+    path = f'../results/inference/ring_inference/{experiment_name}/'
     assert os.path.exists(res_folder)
 
     # Ground-truth results
     if location == "AA_rdbt":
         gt_folder = r'../data/statistical-realism-ground-truth/AA_rdbt_ground_truth/'
     elif location == 'rounD':
+        gt_folder = r'../data/statistical-realism-ground-truth/rounD_ground_truth/'
+    elif location == 'ring':
         gt_folder = r'../data/statistical-realism-ground-truth/rounD_ground_truth/'
     else:
         raise NotImplementedError(
@@ -54,7 +62,7 @@ if __name__ == '__main__':
     print('Done.\n')
 
     # Plot safety-critical statistics for AA_rdbt since there is no rounD ground-truth
-    if location == "AA_rdbt":
+    if location == "AA_rdbt" or "ring":
         # Crash rate
         print("Analyzing crash rate...")
         output_folder = os.path.join(f'plot/{experiment_name}/crash_rate')
