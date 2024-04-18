@@ -15,14 +15,13 @@ import pickle
 # %%
 
 base_dir = '/mnt/d/OneDrive - Massachusetts Institute of Technology/Research/sumo/'
-base_dir = '../data/sumo/'
+base_dir = './data/sumo/'
 assert os.path.exists(base_dir)
 
-simulated_file = os.path.join(base_dir, "ring_faster/out.xml")
+# simulated_file = os.path.join(base_dir, "ring_faster/out.xml")
+simulated_file = os.path.join(base_dir, "ring/out.xml")
 
 assert os.path.exists(simulated_file)
-
-
 
 
 # %%
@@ -51,17 +50,24 @@ sim_df = pd.DataFrame(sim_data)
 sim_df
 
 # %%
-offset = 2
-multiplier = 265/80
-sim_df['x'] = [(float(x) + offset)*multiplier for x in sim_df['x']]
-sim_df['y'] = [(float(y) + offset)*multiplier for y in sim_df['y']]
+negY = -95.09901674512636 
+posX = 170.48733984863466
+offsetY = negY
+multiplier = (abs(negY))/80
+to_zero = 1.6
+offsetY = -80
+multiplier = 1
+
+xs = [(float(x)) + to_zero for x in sim_df['x']]
+ys = [(float(y)) + to_zero for y in sim_df['y']]
+
+sim_df['x'] = [(float(x) + to_zero)*multiplier  for x in sim_df['x']]
+sim_df['y'] = [(float(y) + to_zero)*multiplier + offsetY for y in sim_df['y']]
 
 sim_df['time'] = sim_df['time'].astype(float)
 sim_df['x'] = sim_df['x'].astype(float)
 sim_df['y'] = sim_df['y'].astype(float)
 sim_df['id'] = sim_df['id'].astype(int)
-sim_df['x'] += offset
-sim_df['y'] += offset
 sim_df['angle'] = sim_df['angle'].astype(float)
 sim_df['speed'] = sim_df['speed'].astype(float)
 
@@ -89,19 +95,23 @@ def get_veh_list(t):
     v = Vehicle()
     print(v.location.x, v.location.y)
 
+    # change to 0.4s
+
     vehicle_list = []
     for i in range(len(xs)):
         v = Vehicle()
         v.location.x = xs[i]
         v.location.y = ys[i]
         v.id = ids[i]
-        v.speed_heading = angles[i]
+        # sumo: north, clockwise
+        # yours: east, counterclockwise
+        v.speed_heading = (-angles[i] + 90 ) % 360
         v.speed = speeds[i]
         # v.realworld_4_vertices = 
 
         # if ys[i] > 70 or ys[i] < 10:
         #     vehicle_list.append(v)
-        factor = 0.5
+        factor = 1
         v.size.length, v.size.width = 3.6*factor, 1.8*factor
         v.safe_size.length, v.safe_size.width = 3.8*factor, 2.0*factor
         v.update_poly_box_and_realworld_4_vertices()
@@ -109,14 +119,14 @@ def get_veh_list(t):
         vehicle_list.append(v)
 
     v = vehicle_list[0]
-    print(v.location.x, v.location.y, v.id, v.speed_heading)
+    print('x, y, heading', v.location.x, v.location.y, v.id, v.speed_heading)
     print('poly_box', vars(v.poly_box))
     print('v.size.length, v.size.width', v.size.length, v.size.width)
     return vehicle_list
 
 
 def init_pickle(vehicle_list):
-    path = '../data/inference/ring/simulation_initialization/gen_veh_states/ring'
+    path = './data/inference/ring/simulation_initialization/gen_veh_states/ring'
     output_file_path = os.path.join(path, 'initial_vehicle_dict.pickle')
     vehicle_dict = {'n_in1': vehicle_list}
     pickle.dump(vehicle_dict, open(output_file_path, "wb"))
@@ -130,7 +140,7 @@ for t in range(49):
         init_pickle(vehicle_list)
         continue
     
-    path = '../data/inference/ring/simulation_initialization/initial_clips/ring-01/01/'
+    path = './data/inference/ring/simulation_initialization/initial_clips/ring-01/01/'
     # new_path = os.path.join(path, f"{t:02d}")
     # os.makedirs(new_path)
     new_path = path
@@ -139,13 +149,22 @@ for t in range(49):
     pickle.dump(vehicle_list, open(output_file_path, "wb"))
 
 # %%
-img_size = (round(maxx)+1, round(maxy)+1, 3)
-# img = np.zeros((80,80, 3))
+t=6
+vehicle_list = get_veh_list(t)
+vxs = [v.location.x for v in vehicle_list]
+vys = [v.location.y for v in vehicle_list]
+plt.plot(vxs, vys, '.')
+plt.axis('equal')
+
+# %%
+# img_size = (round(maxx)+1, round(maxy)+1, 3)
+img_size = (80,80, 3)
 img = np.zeros(img_size)
-for x, y in zip(sim_df['x'], sim_df['y']):
+# for x, y in zip(sim_df['x'], sim_df['y']):
+for x, y in zip(xs, ys):
     img[int(x), int(y), :] = 255
 img = img.astype(np.uint8)
-ksize = (20, 20) 
+ksize = (10, 10) 
 # Using cv2.blur() method  
 img = cv2.blur(img, ksize)  
 img[img > 0] = 255
@@ -153,7 +172,7 @@ img[img > 0] = 255
 plt.imshow(img)
 print(img.min(), img.max(), np.unique(img))
 # %%
-base_dir = '../data/inference/ring/'
+base_dir = './data/inference/ring/'
 save_img_path = os.path.join(base_dir,'drivablemap', 'ring-drivablemap.jpg')
 plt.imsave(save_img_path, img)
 save_img_path = os.path.join(base_dir,'basemap', 'ring-official-map.jpg')

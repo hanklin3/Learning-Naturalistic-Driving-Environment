@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -n 2 --gres=gpu:volta:1 -o data/training/behavior_net/AA_rdbt.log-%j
+#SBATCH -n 2 --gres=gpu:volta:1 -o results/training/behavior_net/AA_rdbt.log-%j
 
 source /etc/profile
 source activate NNDE

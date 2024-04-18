@@ -62,7 +62,7 @@ class TrafficSimulator(object):
             pass
         elif os.path.exists(self.checkpoint_dir):
             # initialize network
-            print('initializing networks...')
+            print('initializing networks...from checkpoint_dir', self.checkpoint_dir)
             checkpoint = torch.load(self.checkpoint_dir, map_location=self.device)
             net_G.load_state_dict(checkpoint['model_G_state_dict'])
             # load pre-trained weights

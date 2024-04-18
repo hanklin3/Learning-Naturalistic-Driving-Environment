@@ -37,6 +37,7 @@ if __name__ == '__main__':
     print(f"Simulating {configs['dataset']} using {configs['model']} model...")
     print('Using conflict critic module!') if configs["use_conflict_critic_module"] else print('Not using conflict critic module!')
     print(f'Using neural safety mapper!' if configs["use_neural_safety_mapping"] else 'Not using neural safety mapper!')
+    print("Checkpointd_dir", configs['behavior_model_ckpt_dir'])
     assert (configs["rolling_step"] <= configs["pred_length"])
     configs["viz_flag"] = configs["viz_flag"] or args.viz_flag  # The visualization flag can be easily modified through input argument.
 

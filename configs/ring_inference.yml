@@ -45,11 +45,11 @@ intep_steps: 3  # Number of steps to inter between steps. E.g., resolution is 0.
 ROI_map_dir: "data/inference/ring/ROIs-map"  # Used for metric analysis.
 PET_configs: # This is pixel coordinates of the basemap image
   width_start: 0
-  width_end: 387
+  width_end: 77
   width_n: 20
   width_res: 25.0
   height_start: 0
-  height_end: 387
+  height_end: 80
   height_n: 20
   height_res: 23.5
   # roundD drivable (936, 1678, 3)
@@ -74,8 +74,8 @@ basemap_dir: "data/inference/ring/basemap/ring-official-map.jpg"
 drivable_map_dir: &drivable_map_dir "data/inference/ring/drivablemap/ring-drivablemap.jpg"
 sim_remove_vehicle_area_map: "data/inference/ring/ROIs-map/ring-sim-remove-vehicle-area-map.jpg"  # E.g., exits.
 entrance_map_dir: &entrance_map_dir "data/inference/ring/ROIs-map/entrance"  # Only needed if want to use lane_based_safety_check for initialization.
-map_height: &map_height 257  # The map height and width ratio should be consistent with the basemap and drivable map pictures.
-map_width: &map_width 257
+map_height: &map_height 80  # The map height and width ratio should be consistent with the basemap and drivable map pictures.
+map_width: &map_width 77
 init_traj_clips_dir: "data/inference/ring/simulation_initialization/initial_clips/"  # For initialization.
 traffic_generator_config:
   method: Poisson  # Poisson or Random
