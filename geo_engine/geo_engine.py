@@ -60,7 +60,7 @@ class GeoEngine(object):
         pt_pixel = np.squeeze(pt_pixel)
 
         if output_int:
-            pt_pixel = pt_pixel.astype(np.int)
+            pt_pixel = pt_pixel.astype(int)
 
         return pt_pixel
 

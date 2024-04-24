@@ -24,7 +24,7 @@ if __name__ == '__main__':
     assert os.path.exists(res_folder)
 
     location = 'ring'
-    experiment_name = 'ring_slower'
+    experiment_name = 'ring_0.4s'
     res_folder = f'../results/inference/ring_inference/{experiment_name}/36s/raw_data'
     path = f'../results/inference/ring_inference/{experiment_name}/'
     assert os.path.exists(res_folder)

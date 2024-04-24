@@ -414,8 +414,6 @@ class SimulationInference(object):
             if self.one_sim_colli_flag:
                 # Visualize frames
                 self.visualize_time_buff(TIME_BUFF, tt=tt)
-                import pdb
-                pdb.set_trace()
 
                 if self.save_collision_data_flag:
                     save_steps = 2
@@ -430,7 +428,7 @@ class SimulationInference(object):
     def _visualize_time_buff(self, TIME_BUFF, background_map):
         for i in range(len(TIME_BUFF)):
             vehicle_list = TIME_BUFF[i]
-            vis = background_map.render(vehicle_list, with_traj=True, linewidth=6)
+            vis = background_map.render(vehicle_list, with_traj=True, linewidth=2)
             img = vis[:, :, ::-1]
             # img = cv2.resize(img, (768, int(768 * background_map.h / background_map.w)))  # resize when needed
             cv2.imshow('vis', img)  # rgb-->bgr
@@ -448,7 +446,7 @@ class SimulationInference(object):
         collision_video_writer = cv2.VideoWriter(save_path + r'/{0}.mp4'.format(file_name), cv2.VideoWriter_fourcc(*'MP4V'), self.save_fps, (background_map.w, background_map.h))
         for i in range(len(visualize_TIME_BUFF)):
             vehicle_list = visualize_TIME_BUFF[i]
-            vis = background_map.render(vehicle_list, with_traj=with_traj, linewidth=6, color_vid_list=color_vid_list)
+            vis = background_map.render(vehicle_list, with_traj=with_traj, linewidth=2, color_vid_list=color_vid_list)
             img = vis[:, :, ::-1]
             # img = cv2.resize(img, (768, int(768 * background_map.h / background_map.w)))  # resize when needed
             collision_video_writer.write(img)

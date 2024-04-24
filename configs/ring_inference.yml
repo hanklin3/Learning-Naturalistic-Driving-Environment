@@ -11,7 +11,7 @@ save_collision_data_flag: True  # Save crash data. This must set to True if want
 gen_realistic_metric_flag: True  # Generate and save realistic metrics.
 gen_realistic_metric_dict:  # What metrics to generate.
   PET: False  # Post-encroachment time.
-  instant_speed: True  # Vehicle instantaneous speed
+  instant_speed: False  # Vehicle instantaneous speed
   yielding_speed_and_distance: True  # Each yielding moment calculate the yielding distance and speed with the conflicting vehicle.
   distance: True  # Vehicle distance
 
@@ -26,7 +26,10 @@ pred_length: 5  # number of predicted steps output by the model
 m_tokens: 32  # maximum number of vehicles that can be handled by the model
 
 # Checkpoints of the trained models (behavior modeling net, safety mapping net, etc.)
-behavior_model_ckpt_dir: "data/inference/rounD/behavior_model_ckpt/rounD_behavior_net.pt"
+# behavior_model_ckpt_dir: "data/inference/rounD/behavior_model_ckpt/rounD_behavior_net.pt"
+# behavior_model_ckpt_dir: "data/inference/ring/behavior_model_ckpt/ring_behavior_net.pt"
+# behavior_model_ckpt_dir: "data/inference/ring/behavior_model_ckpt/last_ckpt.pt"
+behavior_model_ckpt_dir: "./results/training/behavior_net/ring_behavior_net_training_fix_data_0.4s/checkpoints/last_ckpt.pt"
 safety_mapper_ckpt_dir: "data/inference/rounD/safety_mapper_ckpt/safety_mapping_net.pt"
 
 # Whether use neural safety mapping module
@@ -74,8 +77,8 @@ basemap_dir: "data/inference/ring/basemap/ring-official-map.jpg"
 drivable_map_dir: &drivable_map_dir "data/inference/ring/drivablemap/ring-drivablemap.jpg"
 sim_remove_vehicle_area_map: "data/inference/ring/ROIs-map/ring-sim-remove-vehicle-area-map.jpg"  # E.g., exits.
 entrance_map_dir: &entrance_map_dir "data/inference/ring/ROIs-map/entrance"  # Only needed if want to use lane_based_safety_check for initialization.
-map_height: &map_height 80  # The map height and width ratio should be consistent with the basemap and drivable map pictures.
-map_width: &map_width 77
+map_height: &map_height 400 #80  # The map height and width ratio should be consistent with the basemap and drivable map pictures.
+map_width: &map_width 400 #77
 init_traj_clips_dir: "data/inference/ring/simulation_initialization/initial_clips/"  # For initialization.
 traffic_generator_config:
   method: Poisson  # Poisson or Random
