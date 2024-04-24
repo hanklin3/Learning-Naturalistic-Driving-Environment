@@ -7,26 +7,43 @@ from pprint import pprint
 import matplotlib.pyplot as plt
 
 # %%
-# from simulation_modeling.simulation_inference import _visualize_time_buff
+# from simulation_modeling.simulation_inference import save_time_buff_video
 
-print('here')
+from basemap import Basemap
+import yaml
+
+config = './configs/AA_rdbt_inference.yml'
+config = './configs/ring_inference.yml'
+
+configs = yaml.safe_load(open(config))
+print(f"Loading config file: {config}")
 
 # %%
 path = './data/inference/rounD/simulation_initialization/initial_clips/rounD-09/01'
 path = './data/training/behavior_net/AA_rdbt/AA_rdbt-10h-data-local-heading-size-36-18/train/01/02/'
 path = './data/training/behavior_net/ring/ring257/train/01/01/'
 # path = './data/inference/ring/simulation_initialization/initial_clips/ring-01/01/'
-datafolder_dirs = glob.glob(os.path.join(path, '*.pickle'))
-print('datafolder_dirs', datafolder_dirs)
-vehicle_list = pickle.load(open(datafolder_dirs[0], "rb"))
-vehicle_list
+
+def get_vehicle_list(max_timestep=0):
+    TIME_BUFF=[]
+    datafolder_dirs = glob.glob(os.path.join(path, '*.pickle'))
+    print('datafolder_dirs', datafolder_dirs)
+    for step, datafolder_dir in enumerate(datafolder_dirs):
+        vehicle_list = pickle.load(open(datafolder_dir, "rb"))
+        TIME_BUFF.append(vehicle_list)
+        if max_timestep > 0 and step > max_timestep:
+            break
+    return TIME_BUFF
 
 # %%
 
-TIME_BUFF=[]
-TIME_BUFF.append(vehicle_list)
-print(TIME_BUFF[:10])
+TIME_BUFF = get_vehicle_list(max_timestep=0)
 
+# TIME_BUFF=[]
+# TIME_BUFF.append(vehicle_list)
+print(TIME_BUFF[-1])
+
+# %%
 for i in range(len(TIME_BUFF)):
     for j in range(len(TIME_BUFF[i])):
         v = TIME_BUFF[i][j]
@@ -35,27 +52,41 @@ for i in range(len(TIME_BUFF)):
 
 
 # %%
-from basemap import Basemap
-import yaml
-
-config = './configs/AA_rdbt_inference.yml'
-config = './configs/ring_inference.yml'
-
-
-configs = yaml.safe_load(open(config))
-print(f"Loading config file: {config}")
-
 
 background_map = Basemap(map_file_dir=configs["basemap_dir"], map_height=configs["map_height"], map_width=configs["map_width"])
 
 def _visualize_time_buff(TIME_BUFF, background_map):
-    for i in range(len(TIME_BUFF)):
-        vehicle_list = TIME_BUFF[i]
-        vis = background_map.render(vehicle_list, with_traj=True, linewidth=6)
-        img = vis[:, :, ::-1]
-        plt.imshow(img)
+    # for i in range(len(TIME_BUFF)):
+    i = 20
+    vehicle_list = TIME_BUFF[i]
+    vis = background_map.render(vehicle_list, with_traj=True, linewidth=1)
+    img = vis[:, :, ::-1]
+    plt.imshow(img)
 
 _visualize_time_buff(TIME_BUFF, background_map)
+
+# %%
+def save_time_buff_video(TIME_BUFF, background_map, file_name, 
+                         save_path, color_vid_list=None, with_traj=True):
+    visualize_TIME_BUFF = TIME_BUFF
+
+    save_fps = 1
+    os.makedirs(save_path, exist_ok=True)
+    collision_video_writer = cv2.VideoWriter(save_path + r'/{0}.mp4'.format(file_name), cv2.VideoWriter_fourcc(*'MP4V'), save_fps, (background_map.w, background_map.h))
+    for i in range(len(visualize_TIME_BUFF)):
+        vehicle_list = visualize_TIME_BUFF[i]
+        vis = background_map.render(vehicle_list, with_traj=with_traj, linewidth=1, color_vid_list=color_vid_list)
+        img = vis[:, :, ::-1]
+        # img = cv2.resize(img, (768, int(768 * background_map.h / background_map.w)))  # resize when needed
+        collision_video_writer.write(img)
+
+save_path = './data/inference/ring'
+with_traj = True
+if with_traj:
+    filename = 'ring_step_0.4s_wTrail'
+else:
+    filename = 'ring_step_0.4s_noTrail'
+save_time_buff_video(TIME_BUFF, background_map, filename, save_path, with_traj=with_traj)
 
 # %%
 # # Demo of our trajectory format
@@ -77,7 +108,7 @@ _visualize_time_buff(TIME_BUFF, background_map)
 # one_sim_TIME_B
 # %%
 
-path = '../data/inference/rounD/simulation_initialization/gen_veh_states/rounD/'
+path = './data/inference/rounD/simulation_initialization/gen_veh_states/rounD/'
 datafolder_dirs = glob.glob(os.path.join(path, '*.pickle'))
 vehicle_list = pickle.load(open(datafolder_dirs[0], "rb"))
 vehicle_list.keys()

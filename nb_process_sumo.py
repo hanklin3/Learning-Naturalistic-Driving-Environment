@@ -107,10 +107,7 @@ def get_veh_list(t):
         # yours: east, counterclockwise
         v.speed_heading = (-angles[i] + 90 ) % 360
         v.speed = speeds[i]
-        # v.realworld_4_vertices = 
 
-        # if ys[i] > 70 or ys[i] < 10:
-        #     vehicle_list.append(v)
         factor = 1
         v.size.length, v.size.width = 3.6*factor, 1.8*factor
         v.safe_size.length, v.safe_size.width = 3.8*factor, 2.0*factor
@@ -118,6 +115,12 @@ def get_veh_list(t):
         v.update_safe_poly_box()
         vehicle_list.append(v)
 
+
+    if not vehicle_list:
+        print('t', t)
+        print(init_df)
+
+    print('t', t)
     v = vehicle_list[0]
     print('x, y, heading', v.location.x, v.location.y, v.id, v.speed_heading)
     print('poly_box', vars(v.poly_box))
@@ -132,21 +135,37 @@ def init_pickle(vehicle_list):
     pickle.dump(vehicle_dict, open(output_file_path, "wb"))
 
 # %%
-for t in range(49):
-    t = int(t)
+t = 0.0
+count = 0
+while t < 1000.0:
+    t = round(t, 2)
 
     vehicle_list = get_veh_list(t)
     if t==0:
         init_pickle(vehicle_list)
+        t += 0.4
+        count += 1
         continue
     
     path = './data/inference/ring/simulation_initialization/initial_clips/ring-01/01/'
-    # new_path = os.path.join(path, f"{t:02d}")
-    # os.makedirs(new_path)
-    new_path = path
-    output_file_path = os.path.join(new_path,f"{t:02d}.pickle")
+    output_file_path = os.path.join(path,f"{count:02d}.pickle")
     print('output_file_path', output_file_path)
     pickle.dump(vehicle_list, open(output_file_path, "wb"))
+
+    path = './data/training/behavior_net/ring/ring257/train/01/01'
+    output_file_path = os.path.join(path,f"{count:02d}.pickle")
+    print('output_file_path', output_file_path)
+    pickle.dump(vehicle_list, open(output_file_path, "wb"))
+
+    if count < 200:
+        path = './data/training/behavior_net/ring/ring257/val/01/01'
+        output_file_path = os.path.join(path,f"{count:02d}.pickle")
+        print('output_file_path', output_file_path)
+        pickle.dump(vehicle_list, open(output_file_path, "wb"))
+
+    t += 0.4
+    count += 1
+
 
 # %%
 t=6
@@ -159,18 +178,22 @@ plt.axis('equal')
 # %%
 # img_size = (round(maxx)+1, round(maxy)+1, 3)
 img_size = (80,80, 3)
+img_resize = (200, 200)
+# img_resize = img_size
 img = np.zeros(img_size)
 # for x, y in zip(sim_df['x'], sim_df['y']):
 for x, y in zip(xs, ys):
-    img[int(x), int(y), :] = 255
+    img[int(x+to_zero), int(y+to_zero), :] = 255
 img = img.astype(np.uint8)
-ksize = (10, 10) 
+img = cv2.resize(img, img_resize)
+ksize = (15, 15) 
 # Using cv2.blur() method  
 img = cv2.blur(img, ksize)  
 img[img > 0] = 255
 
 plt.imshow(img)
 print(img.min(), img.max(), np.unique(img))
+
 # %%
 base_dir = './data/inference/ring/'
 save_img_path = os.path.join(base_dir,'drivablemap', 'ring-drivablemap.jpg')
@@ -196,7 +219,7 @@ json_text = '{' + json_text + '}'
 print(json_text)
 
 # %%
-empty_img = np.zeros(img_size)
+empty_img = np.zeros(img_resize)
 save_img_path = os.path.join(base_dir,'ROIs-map', 'ring-sim-remove-vehicle-area-map.jpg')
 plt.imsave(save_img_path, empty_img)
 print('save_img_path', save_img_path)
