@@ -119,6 +119,7 @@ class Basemap(GeoEngine):
 
             ptc = self._world2pxl([v.location.x, v.location.y])
 
+            # draw based on data/inference/ring/basemap/*.json or not
             if v.realworld_4_vertices is None:
                 # box unavailiable, draw a circle instead
                 _draw_vehicle_as_point_with_meter(vis, ptc, color, x_pixel_per_meter=self.x_pixel_per_meter, r_meter=1)

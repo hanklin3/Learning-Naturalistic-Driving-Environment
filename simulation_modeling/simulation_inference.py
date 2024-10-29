@@ -258,7 +258,7 @@ class SimulationInference(object):
     def _gen_sim_metric(self, one_sim_TIME_BUFF):
         # Construct traj dataframe
         self.SimMetricsAnalyzer.construct_traj_data(one_sim_TIME_BUFF)
-
+        print('self.gen_realistic_metric_dict', self.gen_realistic_metric_dict)
         # PET analysis
         if self.gen_realistic_metric_dict["PET"]:
             PET_list = self.SimMetricsAnalyzer.PET_analysis()
@@ -391,7 +391,7 @@ class SimulationInference(object):
 
         # Run this simulation episode
         for tt in range(self.max_m_steps):
-
+            
             # Visualize frames
             self.visualize_time_buff(TIME_BUFF, tt=tt)
 
@@ -411,6 +411,11 @@ class SimulationInference(object):
 
             # Collision check. If collision, save out crash video and trajectory data if the flag is True.
             self.one_sim_colli_flag = self.sim.collision_check(self.one_sim_TIME_BUFF_newly_generated)
+
+            # Remove collision check
+            self.one_sim_colli_flag = False
+            assert not self.one_sim_colli_flag, self.one_sim_colli_flag
+
             if self.one_sim_colli_flag:
                 # Visualize frames
                 self.visualize_time_buff(TIME_BUFF, tt=tt)
@@ -421,7 +426,8 @@ class SimulationInference(object):
                     collision_data_path = os.path.join(self.realistic_metric_save_folder, 'crash_frame')
                     self.save_trajectory(save_TIME_BUFF, save_path=collision_data_path, sim_id=sim_idx, step_id=0)
 
-                break
+                # uncomment to break after collision
+                # break
 
         self.one_sim_wall_time = (tt + 1) * self.sim_resol * self.rolling_step
 
@@ -434,6 +440,7 @@ class SimulationInference(object):
             cv2.imshow('vis', img)  # rgb-->bgr
             cv2.waitKey(1)
 
+
     def save_time_buff_video(self, TIME_BUFF, background_map, file_name, save_path, color_vid_list=None, with_traj=True):
         if self.interpolate_flag:
             visualize_TIME_BUFF, _ = self.traj_interpolator.interpolate_traj(TIME_BUFF,
@@ -443,6 +450,7 @@ class SimulationInference(object):
             visualize_TIME_BUFF = TIME_BUFF
 
         os.makedirs(save_path, exist_ok=True)
+        print('Saving video to...', save_path + r'/{0}.mp4'.format(file_name))
         collision_video_writer = cv2.VideoWriter(save_path + r'/{0}.mp4'.format(file_name), cv2.VideoWriter_fourcc(*'MP4V'), self.save_fps, (background_map.w, background_map.h))
         for i in range(len(visualize_TIME_BUFF)):
             vehicle_list = visualize_TIME_BUFF[i]
