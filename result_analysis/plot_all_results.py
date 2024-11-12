@@ -13,50 +13,54 @@ if __name__ == '__main__':
     # Simulation results. Change this to the folder of your results
     location = 'AA_rdbt'  # 'AA_rdbt' or 'rounD'
     experiment_name = 'NNDE-open-source-rerun-AA-rdbt-09122023-tune-crash-rate-5'  # 'AA_rdbt_paper_results' or 'rounD_paper_results' or your experiment
-    experiment_name = 'your-experiment-name'
-    # res_folder = f'../data/paper-inference-results/{experiment_name}'
-    res_folder = f'../results/inference/AA_rdbt_inference/{experiment_name}/36s/raw_data'
+    experiment_name = 'AA_rdbt'
+    res_folder = f'./results/inference/AA_rdbt_inference/{experiment_name}/36s/raw_data'
     
-    location = 'rounD'
-    experiment_name = 'your-experiment-name'
-    res_folder = f'../results/inference/rounD_inference/{experiment_name}/36s/raw_data'
-    path = f'../results/inference/rounD_inference/{experiment_name}/'
-    assert os.path.exists(res_folder)
+    # location = 'rounD'
+    # experiment_name = 'rounD'
+    # res_folder = f'./results/inference/rounD_inference/{experiment_name}/36s/raw_data'
+    # path = f'./results/inference/rounD_inference/{experiment_name}/'
 
     location = 'ring'
-    experiment_name = 'ring_0.4s'
-    res_folder = f'../results/inference/ring_inference/{experiment_name}/36s/raw_data'
-    path = f'../results/inference/ring_inference/{experiment_name}/'
-    assert os.path.exists(res_folder)
+    experiment_name = 'ring'
+    res_folder = f'./results/inference/ring_inference/{experiment_name}/36s/raw_data'
+    path = f'./results/inference/ring_inference/{experiment_name}/'
+    
+    location = 'ring'
+    experiment_name = 'ring_0.4_no_jump2'
+    res_folder = f'./results/inference/ring_inference/{experiment_name}/300s/raw_data'
+    path = f'./results/inference/ring_inference/{experiment_name}/'
+
+    assert os.path.exists(res_folder), res_folder
 
     # Ground-truth results
     if location == "AA_rdbt":
-        gt_folder = r'../data/statistical-realism-ground-truth/AA_rdbt_ground_truth/'
+        gt_folder = r'./data/statistical-realism-ground-truth/AA_rdbt_ground_truth/'
     elif location == 'rounD':
-        gt_folder = r'../data/statistical-realism-ground-truth/rounD_ground_truth/'
+        gt_folder = r'./data/statistical-realism-ground-truth/rounD_ground_truth/'
     elif location == 'ring':
-        gt_folder = r'../data/statistical-realism-ground-truth/rounD_ground_truth/'
+        gt_folder = r'./data/statistical-realism-ground-truth/ring_ground_truth/'
     else:
         raise NotImplementedError(
             '{0} does not supported yet...Choose from ["AA_rdbt", "rounD"].'.format(location))
 
     # Instantaneous speed
     print("Analyzing instantaneous speed...")
-    output_folder = os.path.join(f'plot/{experiment_name}/instantaneous_speed')
+    output_folder = os.path.join(f'result_analysis/plot/{experiment_name}/instantaneous_speed')
     os.makedirs(output_folder, exist_ok=True)
     analyze_instant_speed_res(res_folder, output_folder, density=True, gt_folder=gt_folder)
     print('Done.\n')
 
     # Distance
     print("Analyzing distance...")
-    output_folder = os.path.join(f'plot/{experiment_name}/distance')
+    output_folder = os.path.join(f'result_analysis/plot/{experiment_name}/distance')
     os.makedirs(output_folder, exist_ok=True)
     analyze_distance_res(res_folder, output_folder, density=True, gt_folder=gt_folder)
     print('Done.\n')
 
     # Yielding distance and speed
     print("Analyzing yielding distance and speed...")
-    output_folder = os.path.join(f'plot/{experiment_name}/yielding_distance_and_speed')
+    output_folder = os.path.join(f'result_analysis/plot/{experiment_name}/yielding_distance_and_speed')
     os.makedirs(output_folder, exist_ok=True)
     analyze_yielding_dist_and_v_res(res_folder, output_folder, gt_folder=gt_folder, density=True)
     print('Done.\n')
@@ -65,28 +69,28 @@ if __name__ == '__main__':
     if location == "AA_rdbt" or "ring":
         # Crash rate
         print("Analyzing crash rate...")
-        output_folder = os.path.join(f'plot/{experiment_name}/crash_rate')
+        output_folder = os.path.join(f'result_analysis/plot/{experiment_name}/crash_rate')
         os.makedirs(output_folder, exist_ok=True)
         analyze_collision_rate(res_folder, output_folder)
         print('Done.\n')
 
         # Crash severity
         print("Analyzing crash severity...")
-        output_folder = os.path.join(f'plot/{experiment_name}/crash_severity')
+        output_folder = os.path.join(f'result_analysis/plot/{experiment_name}/crash_severity')
         os.makedirs(output_folder, exist_ok=True)
         analyze_crash_severity(res_folder, output_folder)
         print('Done.\n')
 
         # Crash type
         print("Analyzing crash type...")
-        output_folder = os.path.join(f'plot/{experiment_name}/crash_type')
+        output_folder = os.path.join(f'result_analysis/plot/{experiment_name}/crash_type')
         os.makedirs(output_folder, exist_ok=True)
         analyze_collision_type_distribution(res_folder, output_folder, plot_collision_type=['rear_end', 'angle', 'sideswipe'])
         print('Done.\n')
 
         # Distance in near-miss
         print("Analyzing distance in near-miss...")
-        output_folder = os.path.join(f'plot/{experiment_name}/distance_in_near_miss')
+        output_folder = os.path.join(f'result_analysis/plot/{experiment_name}/distance_in_near_miss')
         os.makedirs(output_folder, exist_ok=True)
         analyze_distance_in_near_miss_res(res_folder, output_folder, density=True, gt_folder=gt_folder,
                                           dis_threshold=10)
@@ -94,7 +98,7 @@ if __name__ == '__main__':
 
         # PET
         print("Analyzing PET...")
-        output_folder = os.path.join(f'plot/{experiment_name}/PET')
+        output_folder = os.path.join(f'result_analysis/plot/{experiment_name}/PET')
         os.makedirs(output_folder, exist_ok=True)
         analyze_PET_res(res_folder, output_folder, density=True, gt_folder=gt_folder, sim_resol=0.4, PET_threshold=4)
         print('Done.\n')

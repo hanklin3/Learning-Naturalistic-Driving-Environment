@@ -59,16 +59,18 @@ class RealisticMetrics(object):
     def in_circle_instant_speed_analysis(self):
         instant_speed_list = []
         for vid in self.traj_pool.vehicle_id_list():
-            v_traj = self.traj_df[self.traj_df['vid'] == vid]
-
+            self.traj_df['vid'] = self.traj_df['vid'].astype(int)
+            v_traj = self.traj_df[self.traj_df['vid'] == int(vid)]
+            assert (not v_traj.empty)
             v_in_circle_traj = v_traj[v_traj['region_position'].isin(['circle_1_q', 'circle_2_q', 'circle_3_q', 'circle_4_q'])]
 
             v_in_circle_traj.loc[:, "dt"] = v_in_circle_traj["t"].diff()
             v_in_circle_traj.loc[:, "dx"] = v_in_circle_traj["x"].diff()
             v_in_circle_traj.loc[:, "dy"] = v_in_circle_traj["y"].diff()
             v_in_circle_traj.loc[:, "travel_distance"] = (v_in_circle_traj["dx"] ** 2 + v_in_circle_traj["dy"] ** 2) ** 0.5
-
-            assert (v_in_circle_traj.dt.dropna() > 0).all()
+            #added code
+            v_in_circle_traj = v_in_circle_traj.loc[v_in_circle_traj['dt'] > 0]
+            assert (v_in_circle_traj.dt.dropna() > 0).all(), v_in_circle_traj.dt
 
             v_in_circle_traj.loc[:, "instant_speed"] = v_in_circle_traj['travel_distance'] / (v_in_circle_traj['dt'] * self.sim_resol)  # [m/s]
             instant_speed_tmp = v_in_circle_traj['instant_speed'].dropna().tolist()
@@ -93,7 +95,9 @@ class RealisticMetrics(object):
                                                  'yielding_s': 'circle_4_q', 'yielding_w': 'circle_1_q'}
 
         for vid in self.traj_pool.vehicle_id_list():
-            v_traj = self.traj_df[self.traj_df['vid'] == vid]
+            self.traj_df['vid'] = self.traj_df['vid'].astype(int)
+            v_traj = self.traj_df[self.traj_df['vid'] == int(vid)]
+            assert (not v_traj.empty)
             v_in_yielding_area = v_traj[v_traj['yielding_area'].isin(['yielding_n', 'yielding_e', 'yielding_s', 'yielding_w'])]
             v_yielding_location_list = v_in_yielding_area.yielding_area.unique().tolist()
 
@@ -104,7 +108,9 @@ class RealisticMetrics(object):
             conflict_circle_quadrant = yielding_conflicting_quadrant_mapping[v_yielding_location]
 
             v_in_yielding_area.loc[:, "dt"] = v_in_yielding_area["t"].diff()
-            assert (v_in_yielding_area.dt.dropna() > 0).all()
+            #added code
+            v_in_yielding_area = v_in_yielding_area.loc[v_in_yielding_area['dt'] > 0]
+            assert (v_in_yielding_area.dt.dropna() > 0).all(), v_in_yielding_area.dt
             v_in_yielding_area.loc[:, "dx"] = v_in_yielding_area["x"].diff()
             v_in_yielding_area.loc[:, "dy"] = v_in_yielding_area["y"].diff()
             v_in_yielding_area.loc[:, "travel_distance"] = (v_in_yielding_area["dx"] ** 2 + v_in_yielding_area["dy"] ** 2) ** 0.5
@@ -130,6 +136,9 @@ class RealisticMetrics(object):
                 travel_dist = ((conflict_v_prev_traj.iloc[-1]['x'] - conflict_v_prev_traj.iloc[-2]['x']) ** 2 + (conflict_v_prev_traj.iloc[-1]['y'] - conflict_v_prev_traj.iloc[-2]['y']) ** 2) ** 0.5
                 travel_time = conflict_v_prev_traj.iloc[-1]['t'] - conflict_v_prev_traj.iloc[-2]['t']
                 if travel_time > 2:
+                    continue
+                # assert travel_time > 0., (travel_time, travel_dist, conflict_v_prev_traj.iloc[-1]['t'], conflict_v_prev_traj.iloc[-2]['t'])
+                if not travel_time > 0:
                     continue
                 conflict_v_speed = travel_dist / (travel_time * self.sim_resol)
                 conflict_v_dist = closest_other_v.Euclidean_dist

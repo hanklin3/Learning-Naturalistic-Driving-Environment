@@ -112,6 +112,7 @@ class TrafficGenerator(object):
             if self.method == 'Random':
                 arr_or_gen_prob = self.random_gen_prob_each_pos[idx] if len(self.random_gen_prob_each_pos) > 0 else self.default_random_gen_prob
             gen_flag = self._gen(arr_or_gen_prob)
+            # assert not gen_flag, arr_or_gen_prob
 
             if gen_flag:
                 safe_flag = None
@@ -274,5 +275,5 @@ class ring_TrafficGenerator(TrafficGenerator):
 
         self.local_source_pos = [(loc[0], loc[1]) for loc in self.global_source_pos]
 
-        self.poisson_arr_rate_each_pos = [10000]  # veh/h based on rounD
-        self.dt_arr_rate_each_pos = [poisson_arr_rate / (3600 / self.sim_ros) for poisson_arr_rate in self.poisson_arr_rate_each_pos]  # veh/each resolution
+        # self.poisson_arr_rate_each_pos = [10000]  # veh/h based on rounD
+        # self.dt_arr_rate_each_pos = [poisson_arr_rate / (3600 / self.sim_ros) for poisson_arr_rate in self.poisson_arr_rate_each_pos]  # veh/each resolution

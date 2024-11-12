@@ -42,7 +42,7 @@ class SimulationInference(object):
             self.traffic_generator = AA_rdbt_TrafficGenerator(config=configs["traffic_generator_config"])
         elif configs["dataset"] == 'rounD':
             self.traffic_generator = rounD_TrafficGenerator(config=configs["traffic_generator_config"])
-        elif configs["dataset"] == 'ring':
+        elif 'ring' in configs["dataset"]:
             self.traffic_generator = ring_TrafficGenerator(config=configs["traffic_generator_config"])
         else:
             raise NotImplementedError('{0} does not supported yet...Choose from ["AA_rdbt", "rounD"].'.format(configs["dataset"]))
@@ -96,7 +96,7 @@ class SimulationInference(object):
                 PET_configs = configs["PET_configs"]
                 PET_configs["basemap_img"] = basemap_img
 
-            elif self.dataset == 'ring':
+            elif 'ring' in  self.dataset:
                 basemap_img = cv2.imread(configs["basemap_dir"], cv2.IMREAD_COLOR)
                 basemap_img = cv2.cvtColor(basemap_img, cv2.COLOR_BGR2RGB)
                 basemap_img = cv2.resize(basemap_img, (configs["map_width"], configs["map_height"]))

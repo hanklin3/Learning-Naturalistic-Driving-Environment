@@ -23,6 +23,7 @@ path = './data/training/behavior_net/ring/ring257/train/01/01/'
 path = './data/training/behavior_net/ring_larger/ring257/train/01/01/'
 path = './data/inference/ring_larger/simulation_initialization/initial_clips/ring-01/01'
 config = './configs/ring_inference_larger.yml'
+
 # path = './data/inference/ring/simulation_initialization/initial_clips/ring-01/01'
 # path = './results/inference/ring_inference/ring/300s/TIME_BUFF/3/0/'
 

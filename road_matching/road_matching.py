@@ -34,8 +34,10 @@ class RoadMatcher(GeoEngine):
         lat_min = self.f.tl[0]
         lon_max = self.f.tl[1]
         lon_min = self.f.br[1]
-        if lat < lat_max and lat > lat_min and lon < lon_max and lon > lon_min:
+        if lat <= lat_max and lat >= lat_min and lon <= lon_max and lon >= lon_min:
             return True
         else:
+            assert lat <= lat_max and lat >= lat_min, (lat, lat_min, lat_max)
+            assert lon <= lon_max and lon >= lon_min, (lon, lon_min, lon_max)
             return False
 
