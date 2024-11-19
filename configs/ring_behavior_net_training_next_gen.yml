@@ -18,3 +18,6 @@ dataloader_num_workers: 8  # num_workers
 
 # Pre-trained safety mapping network
 safety_mapper_ckpt_dir: "data/training/behavior_net/ring_traci/safety_mapper_ckpt/safety_mapping_net.pt"
+
+goal_indices: null  # weight the goal position for the loss function
+goal_weight: 0.0
