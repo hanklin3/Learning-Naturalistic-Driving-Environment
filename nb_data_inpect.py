@@ -24,6 +24,20 @@ path = './data/training/behavior_net/ring_larger/ring257/train/01/01/'
 path = './data/inference/ring_larger/simulation_initialization/initial_clips/ring-01/01'
 config = './configs/ring_inference_larger.yml'
 
+path = './data/inference/ring/simulation_initialization/initial_clips/ring-01/01'
+config = './configs/ring_inference_next_gen.yml'
+
+path = './data/inference/ring/simulation_initialization__xml_gen/initial_clips/ring-01/01'
+config = './configs/ring_inference_0.4_no_jump2.yml'
+
+path = './data/inference/ring/simulation_initialization__xml_gen/initial_clips/ring-01/01'
+config = './configs/ring_inference_0.4_no_jump2.yml'
+
+path = './data/inference/ring_traci/simulation_initialization/initial_clips/ring-01/01'
+path = './data/training/behavior_net/ring_traci/ring257/train/01/01'
+path = './data/training/behavior_net/ring_traci/ring257/val/01/01'
+config = './configs/ring_inference_next_gen.yml'
+
 # path = './data/inference/ring/simulation_initialization/initial_clips/ring-01/01'
 # path = './results/inference/ring_inference/ring/300s/TIME_BUFF/3/0/'
 
@@ -96,12 +110,13 @@ def _visualize_time_buff(TIME_BUFF, background_map, i = 4):
 # %%
 def save_time_buff_video(TIME_BUFF, background_map, file_name, 
                          save_path, color_vid_list=None, with_traj=True,
-                         interpolate_flag=True):
+                         interpolate_flag=False):
     traj_interpolator = TrajInterpolator()
     if interpolate_flag:
             visualize_TIME_BUFF, _ = traj_interpolator.interpolate_traj(TIME_BUFF,
                                         intep_steps=configs["intep_steps"],
                                         original_resolution=configs["sim_resol"])
+            assert False
     else:
         visualize_TIME_BUFF = TIME_BUFF
 
@@ -123,9 +138,9 @@ def save_time_buff_video(TIME_BUFF, background_map, file_name,
 save_path = path
 with_traj = True
 if with_traj:
-    filename = 'ring_step_0.4s_wTrail_no_jump'
+    filename = 'ring_wTrail'
 else:
-    filename = 'ring_step_0.4s_noTrail_no_jump'
+    filename = 'ring_noTrail'
 save_time_buff_video(TIME_BUFF, background_map, filename, save_path, with_traj=with_traj,
                      interpolate_flag=False)
 
