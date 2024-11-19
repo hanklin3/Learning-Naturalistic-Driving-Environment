@@ -20,7 +20,8 @@ gen_realistic_metric_dict:  # What metrics to generate.
 # NeuralNDE model
 # The parameters below are determined by your trained model
 model: "transformer"
-dataset: "ring_0.4_no_jump2__good_11-12"
+# dataset: "ring_0.4_no_jump2__good_11-12"
+dataset: "ring"
 history_length: 5  # number of historical steps input to the model
 pred_length: 5  # number of predicted steps output by the model
 m_tokens: 32  # maximum number of vehicles that can be handled by the model
@@ -30,8 +31,7 @@ m_tokens: 32  # maximum number of vehicles that can be handled by the model
 # behavior_model_ckpt_dir: "data/inference/ring/behavior_model_ckpt/ring_behavior_net.pt"
 # behavior_model_ckpt_dir: "data/inference/ring/behavior_model_ckpt/last_ckpt.pt"
 # behavior_model_ckpt_dir: "./results/training/behavior_net/ring_behavior_net_training_fix_data_0.4s/checkpoints/last_ckpt.pt"
-# behavior_model_ckpt_dir: "./results/training/behavior_net/ring_behavior_net_training_0.4_no_jump/checkpoints/last_ckpt.pt"
-behavior_model_ckpt_dir: "./results/training/behavior_net/ring_behavior_net_training_0.4_no_jump2/checkpoints/last_ckpt.pt"
+behavior_model_ckpt_dir: "./results/training/behavior_net/ring_behavior_net_training_0.4_no_jump/checkpoints/last_ckpt.pt"
 safety_mapper_ckpt_dir: "data/inference/rounD/safety_mapper_ckpt/safety_mapping_net.pt"
 
 # Whether use neural safety mapping module

@@ -4,4 +4,4 @@
 source /etc/profile
 source activate NNDE
 
-python3 run_training_behavior_net.py --config ./configs/ring_behavior_net_training.yml --experiment-name ring_data_gen_from_traci_no_offset
+python3 run_training_behavior_net.py --config ./configs/ring_behavior_net_training_next_gen.yml --experiment-name 0012_ring_traci_fix_gpu_leak_11-18
