@@ -11,7 +11,7 @@ from simulation_modeling.simulation_inference import SimulationInference
 parser = argparse.ArgumentParser()
 parser.add_argument('--folder-idx', type=int, default='1', metavar='N',
                     help='Worker id of the running experiment')
-parser.add_argument('--experiment-name', type=str, required=True,
+parser.add_argument('--experiment-name', type=str, #required=True,
                     help='The name of the experiment folder where the data will be stored')
 parser.add_argument('--save-result-path', type=str, default=r'./results/inference/',
                     help='The path to save the simulation results, a folder with experiment_name will be created in the path')
@@ -44,6 +44,9 @@ if __name__ == '__main__':
     # Saving results paths
     folder_idx = args.folder_idx  # The worker index, the simulation can be run in multiple cores (e.g., using job array on the Great Lakes HPC)
     experiment_name = args.experiment_name
+    if experiment_name == '' or experiment_name is None:
+        experiment_name = configs['behavior_model_ckpt_dir'].split('/')[-3]
+    print('experiment_name:', experiment_name)
     save_result_path = args.save_result_path
     configs["realistic_metric_save_folder"] = os.path.join(save_result_path, f'{configs["dataset"]}_inference/{experiment_name}/{str(configs["sim_wall_time"])}s/raw_data/{str(folder_idx)}')
     configs["simulated_TIME_BUFF_save_folder"] = os.path.join(save_result_path, f'{configs["dataset"]}_inference/{experiment_name}/{str(configs["sim_wall_time"])}s/TIME_BUFF/{str(folder_idx)}')
